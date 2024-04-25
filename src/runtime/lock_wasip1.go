@@ -71,11 +71,13 @@ func notewakeup(n *note) {
 }
 
 func notesleep(n *note) {
-	throw("notesleep not supported by wasi")
+	// throw("notesleep not supported by wasi")
+	// No-op since WASM is single-threaded.
+	return
 }
 
 func notetsleep(n *note, ns int64) bool {
-	throw("notetsleep not supported by wasi")
+	// throw("notetsleep not supported by wasi")
 	return false
 }
 

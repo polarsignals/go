@@ -9,11 +9,12 @@ import (
 	"internal/cpu"
 	"internal/goarch"
 	"internal/goos"
+	"runtime/internal/sys"
+	"unsafe"
+
 	"internal/runtime/atomic"
 	"internal/runtime/exithook"
 	"internal/stringslite"
-	"runtime/internal/sys"
-	"unsafe"
 )
 
 // set using cmd/go/internal/modload.ModInfoProg
@@ -816,8 +817,10 @@ func schedinit() {
 	mallocinit()
 	godebug := getGodebugEarly()
 	cpuinit(godebug) // must run before alginit
-	randinit()       // must run before alginit, mcommoninit
-	alginit()        // maps, hash, rand must not be used before this call
+	// To access environment variables.
+	goenvs()
+	randinit() // must run before alginit, mcommoninit
+	alginit()  // maps, hash, rand must not be used before this call
 	mcommoninit(gp.m, -1)
 	modulesinit()   // provides activeModules
 	typelinksinit() // uses maps, activeModules
@@ -6661,7 +6664,7 @@ func runqempty(pp *p) bool {
 // With the randomness here, as long as the tests pass
 // consistently with -race, they shouldn't have latent scheduling
 // assumptions.
-const randomizeScheduler = raceenabled
+const randomizeScheduler = true
 
 // runqput tries to put g on the local runnable queue.
 // If next is false, runqput adds g to the tail of the runnable queue.

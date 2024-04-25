@@ -181,6 +181,7 @@ func usleep(usec uint32) {
 }
 
 func readRandom(r []byte) int {
+	throw("wasip1 readRandom should not be called use GORANDSEED to seed runtime")
 	if random_get(unsafe.Pointer(&r[0]), size(len(r))) != 0 {
 		return 0
 	}

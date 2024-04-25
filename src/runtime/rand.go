@@ -41,6 +41,15 @@ func randinit() {
 	}
 
 	seed := &globalRand.seed
+	psSeed := gogetenv("GORANDSEED")
+	if psSeed != "" {
+		// println("Go runtime is using GORANDSEED=", psSeed)
+		startupRand = make([]byte, len(psSeed))
+		for i, c := range psSeed {
+			startupRand[i] = byte(c)
+		}
+	}
+
 	if startupRand != nil {
 		for i, c := range startupRand {
 			seed[i%len(seed)] ^= c
