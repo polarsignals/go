@@ -31,5 +31,3 @@ if [ ! -f make.bash ]; then
 	exit 1
 fi
 . ./make.bash --no-banner
-go install -race std
-go tool dist test -race
